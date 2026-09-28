@@ -1,9 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import ResumoCompra from "../components/ResumoCompra.jsx";
 import { produtos } from "../data/produtos.js";
+import usePagamento from "../hooks/usePagamento.js";
+import { limparNumeroCartao } from "../utils/pagamento.js";
 
 const pagamentoSchema = z.object({
   titular: z.string().min(1, "Informe o nome do titular."),
@@ -20,6 +22,9 @@ const pagamentoSchema = z.object({
 });
 
 function Pagamento() {
+  const navigate = useNavigate();
+  const { processando, processarPagamento } = usePagamento();
+
   const total = produtos.reduce((acumulador, produto) => {
     return acumulador + produto.precoUnitario * produto.quantidade;
   }, 0);
@@ -43,8 +48,19 @@ function Pagamento() {
     });
   }
 
-  function enviarPagamento(dados) {
-    console.log("Dados válidos para pagamento:", dados);
+  async function enviarPagamento(dados) {
+    const resultado = await processarPagamento(dados);
+
+    if (!resultado) {
+      return;
+    }
+
+    if (resultado.aprovado) {
+      navigate("/sucesso");
+      return;
+    }
+
+    navigate("/falha");
   }
 
   return (
@@ -55,13 +71,17 @@ function Pagamento() {
       </div>
 
       <div className="layout-pagamento">
-        <form className="formulario-pagamento" onSubmit={handleSubmit(enviarPagamento)}>
+        <form
+          className="formulario-pagamento"
+          onSubmit={handleSubmit(enviarPagamento)}
+        >
           <div className="campo-formulario">
             <label htmlFor="titular">Titular do cartão</label>
             <input
               id="titular"
               type="text"
               placeholder="Ex.: Tainara Lauschner"
+              disabled={processando}
               {...register("titular")}
             />
             {errors.titular && (
@@ -76,6 +96,7 @@ function Pagamento() {
               type="text"
               inputMode="numeric"
               placeholder="Ex.: 1234 5678 9012 3456"
+              disabled={processando}
               {...register("numeroCartao")}
             />
             {errors.numeroCartao && (
@@ -90,6 +111,7 @@ function Pagamento() {
                 id="validade"
                 type="text"
                 placeholder="MM/AA"
+                disabled={processando}
                 {...register("validade")}
               />
               {errors.validade && (
@@ -104,6 +126,7 @@ function Pagamento() {
                 type="text"
                 inputMode="numeric"
                 placeholder="123"
+                disabled={processando}
                 {...register("cvv")}
               />
               {errors.cvv && (
@@ -112,8 +135,14 @@ function Pagamento() {
             </div>
           </div>
 
-          <button className="botao" type="submit">
-            Pagar agora
+          {processando && (
+            <p className="mensagem-processando" aria-live="polite">
+              Processando compra…
+            </p>
+          )}
+
+          <button className="botao" type="submit" disabled={processando}>
+            {processando ? "Processando..." : "Pagar agora"}
           </button>
 
           <Link className="link-secundario" to="/">
@@ -130,10 +159,6 @@ function Pagamento() {
       </div>
     </section>
   );
-}
-
-function limparNumeroCartao(numeroCartao) {
-  return numeroCartao.replace(/[\s-]/g, "");
 }
 
 export default Pagamento;

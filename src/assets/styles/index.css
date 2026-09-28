@@ -243,3 +243,15 @@ button {
     grid-template-columns: 1fr 1fr;
   }
 }
+
+.mensagem-processando {
+  margin: 0;
+  color: #082f3f;
+  font-weight: 700;
+}
+
+button:disabled,
+input:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
