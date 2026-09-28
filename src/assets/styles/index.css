@@ -111,3 +111,76 @@ button {
     justify-content: space-between;
   }
 }
+
+.pagina__cabecalho {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.pagina__cabecalho p {
+  margin: 0;
+  color: #355866;
+}
+
+.layout-carrinho {
+  display: grid;
+  gap: 1rem;
+}
+
+.lista-carrinho {
+  display: grid;
+  gap: 1rem;
+}
+
+.item-carrinho,
+.resumo-compra {
+  background-color: #ffffff;
+  border: 1px solid #d7e5ec;
+  border-radius: 1rem;
+  padding: 1rem;
+}
+
+.item-carrinho {
+  display: grid;
+  gap: 1rem;
+}
+
+.item-carrinho h3,
+.resumo-compra h3 {
+  margin-top: 0;
+}
+
+.item-carrinho p,
+.resumo-compra p {
+  margin: 0.35rem 0;
+}
+
+.item-carrinho__valores {
+  color: #355866;
+}
+
+.resumo-compra {
+  align-self: start;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.resumo-compra__total {
+  font-size: 1.25rem;
+}
+
+@media (min-width: 48rem) {
+  .layout-carrinho {
+    grid-template-columns: 2fr 1fr;
+    align-items: start;
+  }
+
+  .item-carrinho {
+    grid-template-columns: 1fr auto;
+    align-items: center;
+  }
+
+  .item-carrinho__valores {
+    text-align: right;
+  }
+}
