@@ -184,3 +184,62 @@ button {
     text-align: right;
   }
 }
+
+.layout-pagamento {
+  display: grid;
+  gap: 1rem;
+}
+
+.formulario-pagamento {
+  background-color: #ffffff;
+  border: 1px solid #d7e5ec;
+  border-radius: 1rem;
+  padding: 1rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.campo-formulario {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.campo-formulario label {
+  font-weight: 700;
+}
+
+.campo-formulario input {
+  width: 100%;
+  border: 1px solid #b7cbd4;
+  border-radius: 0.75rem;
+  padding: 0.8rem;
+  font: inherit;
+}
+
+.campo-formulario input:focus {
+  outline: 3px solid rgba(32, 200, 120, 0.35);
+  border-color: #20c878;
+}
+
+.grupo-campos {
+  display: grid;
+  gap: 1rem;
+}
+
+.mensagem-erro {
+  margin: 0;
+  color: #b42318;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+@media (min-width: 48rem) {
+  .layout-pagamento {
+    grid-template-columns: 2fr 1fr;
+    align-items: start;
+  }
+
+  .grupo-campos {
+    grid-template-columns: 1fr 1fr;
+  }
+}
