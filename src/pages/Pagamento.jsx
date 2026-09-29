@@ -16,8 +16,11 @@ const pagamentoSchema = z.object({
       message: "O cartão deve ter 16 dígitos.",
     }),
   validade: z
-    .string()
-    .regex(/^(0[1-9]|1[0-2])\/\d{2}$/, "Informe a validade no formato MM/AA."),
+  .string()
+  .regex(/^(0[1-9]|1[0-2])\/\d{2}$/, "Informe a validade no formato MM/AA.")
+  .refine((valor) => validadeNaoEstaVencida(valor), {
+    message: "O cartão está vencido.",
+  }),
   cvv: z.string().regex(/^\d{3}$/, "O CVV deve ter 3 dígitos."),
 });
 
@@ -193,6 +196,34 @@ function Pagamento() {
       </div>
     </section>
   );
+}
+
+function validadeNaoEstaVencida(validade) {
+  const validadeEstaNoFormatoCorreto = /^(0[1-9]|1[0-2])\/\d{2}$/.test(
+    validade
+  );
+
+  if (!validadeEstaNoFormatoCorreto) {
+    return false;
+  }
+
+  const [mes, ano] = validade.split("/");
+  const mesValidade = Number(mes);
+  const anoValidade = Number(`20${ano}`);
+
+  const dataAtual = new Date();
+  const mesAtual = dataAtual.getMonth() + 1;
+  const anoAtual = dataAtual.getFullYear();
+
+  if (anoValidade < anoAtual) {
+    return false;
+  }
+
+  if (anoValidade === anoAtual && mesValidade < mesAtual) {
+    return false;
+  }
+
+  return true;
 }
 
 export default Pagamento;
