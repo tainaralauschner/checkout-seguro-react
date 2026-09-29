@@ -36,6 +36,7 @@ function Pagamento() {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(pagamentoSchema),
@@ -45,6 +46,32 @@ function Pagamento() {
     return valor.toLocaleString("pt-BR", {
       style: "currency",
       currency: "BRL",
+    });
+  }
+
+  function formatarNumeroCartao(event) {
+    const somenteNumeros = event.target.value.replace(/\D/g, "").slice(0, 16);
+
+    const numeroFormatado = somenteNumeros.replace(/(\d{4})(?=\d)/g, "$1 ");
+
+    setValue("numeroCartao", numeroFormatado, {
+      shouldValidate: true,
+    });
+  }
+
+  function formatarValidade(event) {
+    const somenteNumeros = event.target.value.replace(/\D/g, "").slice(0, 4);
+
+    let validadeFormatada = somenteNumeros;
+
+    if (somenteNumeros.length > 2) {
+      validadeFormatada = `${somenteNumeros.slice(0, 2)}/${somenteNumeros.slice(
+        2,
+      )}`;
+    }
+
+    setValue("validade", validadeFormatada, {
+      shouldValidate: true,
     });
   }
 
@@ -95,9 +122,12 @@ function Pagamento() {
               id="numeroCartao"
               type="text"
               inputMode="numeric"
+              maxLength="19"
               placeholder="Ex.: 1234 5678 9012 3456"
               disabled={processando}
-              {...register("numeroCartao")}
+              {...register("numeroCartao", {
+                onChange: formatarNumeroCartao,
+              })}
             />
             {errors.numeroCartao && (
               <p className="mensagem-erro">{errors.numeroCartao.message}</p>
@@ -110,9 +140,13 @@ function Pagamento() {
               <input
                 id="validade"
                 type="text"
+                inputMode="numeric"
+                maxLength="5"
                 placeholder="MM/AA"
                 disabled={processando}
-                {...register("validade")}
+                {...register("validade", {
+                  onChange: formatarValidade,
+                })}
               />
               {errors.validade && (
                 <p className="mensagem-erro">{errors.validade.message}</p>

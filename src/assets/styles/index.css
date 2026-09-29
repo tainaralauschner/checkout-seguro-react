@@ -255,3 +255,77 @@ input:disabled {
   cursor: not-allowed;
   opacity: 0.65;
 }
+
+/* Ajustes finais de acessibilidade e responsividade */
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
+  outline: 3px solid #20c878;
+  outline-offset: 3px;
+}
+
+.botao,
+.link-secundario {
+  border: none;
+  text-align: center;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.botao:hover,
+.link-secundario:hover {
+  filter: brightness(0.95);
+  transform: translateY(-1px);
+}
+
+.link-secundario:hover {
+  background-color: #e8f7f0;
+}
+
+.formulario-pagamento .botao {
+  width: 100%;
+}
+
+.campo-formulario input::placeholder {
+  color: #6f8791;
+}
+
+.pagina {
+  padding-bottom: 2rem;
+}
+
+.resumo-compra {
+  box-shadow: 0 0.75rem 2rem rgba(8, 47, 63, 0.08);
+}
+
+.item-carrinho {
+  box-shadow: 0 0.5rem 1.5rem rgba(8, 47, 63, 0.05);
+}
+
+@media (max-width: 30rem) {
+  main {
+    width: min(100% - 1rem, 70rem);
+    padding: 1rem 0;
+  }
+
+  .cabecalho__conteudo {
+    width: min(100% - 1rem, 70rem);
+  }
+
+  .logo-texto {
+    font-size: 1.2rem;
+  }
+
+  .navegacao {
+    gap: 0.5rem;
+  }
+
+  .navegacao a {
+    font-size: 0.95rem;
+  }
+
+  .botao,
+  .link-secundario {
+    width: 100%;
+  }
+}
